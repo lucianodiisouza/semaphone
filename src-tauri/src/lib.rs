@@ -73,17 +73,30 @@ fn focus_main_window(app: &AppHandle) {
 }
 
 fn setup_tray(app: &AppHandle) -> tauri::Result<()> {
+    let config = Config::load();
     let show = MenuItem::with_id(app, "show", "Show Semaphore", true, None::<&str>)?;
     let hide = MenuItem::with_id(app, "hide", "Hide Window", true, None::<&str>)?;
     let settings = MenuItem::with_id(app, "settings", "Settings", true, None::<&str>)?;
     let stealth = MenuItem::with_id(app, "stealth", "Toggle Stealth", true, None::<&str>)?;
+    let always_on_top = CheckMenuItem::with_id(
+        app,
+        "always_on_top",
+        "Always on Top",
+        true,
+        config.always_on_top,
+        None::<&str>,
+    )?;
+    let always_on_top_toggle = always_on_top.clone();
     let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
-    let menu = Menu::with_items(app, &[&show, &hide, &settings, &stealth, &quit])?;
+    let menu = Menu::with_items(
+        app,
+        &[&show, &hide, &settings, &stealth, &always_on_top, &quit],
+    )?;
 
     let _tray = TrayIconBuilder::new()
         .icon(app.default_window_icon().unwrap().clone())
         .menu(&menu)
-        .on_menu_event(|app, event| match event.id.as_ref() {
+        .on_menu_event(move |app, event| match event.id.as_ref() {
             "show" => focus_main_window(app),
             "hide" => {
                 if let Some(window) = app.get_webview_window("main") {
@@ -98,6 +111,15 @@ fn setup_tray(app: &AppHandle) -> tauri::Result<()> {
                     let mut config = Config::load();
                     config.stealth = !config.stealth;
                     let _ = window.set_content_protected(config.stealth);
+                    let _ = config.save();
+                }
+            }
+            "always_on_top" => {
+                if let Some(window) = app.get_webview_window("main") {
+                    let mut config = Config::load();
+                    config.always_on_top = !config.always_on_top;
+                    let _ = window.set_always_on_top(config.always_on_top);
+                    let _ = always_on_top_toggle.set_checked(config.always_on_top);
                     let _ = config.save();
                 }
             }
@@ -176,6 +198,7 @@ pub fn run() {
                 if config.stealth {
                     let _ = window.set_content_protected(true);
                 }
+                let _ = window.set_always_on_top(config.always_on_top);
                 let _ = window.set_position(tauri::Position::Physical(
                     tauri::PhysicalPosition::new(config.window.x, config.window.y),
                 ));
