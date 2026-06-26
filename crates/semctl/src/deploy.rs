@@ -13,18 +13,30 @@ pub fn deploy_semctl() -> Result<(), Box<dyn std::error::Error>> {
     fs::create_dir_all(Config::bin_dir())?;
 
     if dest.exists() {
-        return Ok(());
-    }
-
-    if let Some(source) = locate_semctl_binary() {
-        fs::copy(&source, &dest)?;
         #[cfg(unix)]
         {
             use std::os::unix::fs::PermissionsExt;
-            let mut perms = fs::metadata(&dest)?.permissions();
-            perms.set_mode(0o755);
-            fs::set_permissions(&dest, perms)?;
+            if fs::metadata(&dest)?.permissions().mode() & 0o111 != 0 {
+                return Ok(());
+            }
         }
+        #[cfg(not(unix))]
+        {
+            return Ok(());
+        }
+    }
+
+    let Some(source) = locate_semctl_binary() else {
+        return Ok(());
+    };
+
+    fs::copy(&source, &dest)?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        let mut perms = fs::metadata(&dest)?.permissions();
+        perms.set_mode(0o755);
+        fs::set_permissions(&dest, perms)?;
     }
 
     Ok(())
@@ -43,13 +55,9 @@ fn locate_semctl_binary() -> Option<PathBuf> {
         }
     }
 
-    for candidate in candidate_paths(&current) {
-        if candidate.exists() {
-            return Some(candidate);
-        }
-    }
-
-    None
+    candidate_paths(&current)
+        .into_iter()
+        .find(|candidate| candidate.exists())
 }
 
 fn is_semctl_name(name: &str) -> bool {
@@ -60,18 +68,26 @@ fn candidate_paths(current_exe: &Path) -> Vec<PathBuf> {
     let mut paths = Vec::new();
 
     if let Some(parent) = current_exe.parent() {
+        // Same folder as the Semaphore binary (dev build or Tauri externalBin).
         paths.push(parent.join("semctl"));
         paths.push(parent.join("semctl.exe"));
         paths.push(parent.join("bin").join("semctl"));
         paths.push(parent.join("bin").join("semctl.exe"));
-        // macOS .app bundle Resources
-        paths.push(parent.join("../Resources/semctl"));
+        // Tauri externalBin sidecar (e.g. semctl-aarch64-apple-darwin).
+        if let Ok(entries) = fs::read_dir(parent) {
+            for entry in entries.flatten() {
+                let name = entry.file_name();
+                let name = name.to_string_lossy();
+                if name.starts_with("semctl-") {
+                    paths.push(entry.path());
+                }
+            }
+        }
+        // macOS .app bundle Resources (legacy layout).
+        if let Ok(resources) = parent.join("../Resources").canonicalize() {
+            paths.push(resources.join("semctl"));
+        }
     }
-
-    paths.push(PathBuf::from("target/debug/semctl"));
-    paths.push(PathBuf::from("target/release/semctl"));
-    paths.push(PathBuf::from("target/debug/semctl.exe"));
-    paths.push(PathBuf::from("target/release/semctl.exe"));
 
     paths
 }
