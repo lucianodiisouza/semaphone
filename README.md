@@ -12,7 +12,7 @@ Floating traffic light for AI coding agents. Know at a glance when your agent is
 
 Pre-built binaries for macOS (Apple Silicon & Intel), Linux, and Windows:
 
-**[Download latest release](https://github.com/lucianodiisouza/semaphone/releases/latest)**
+**[Download latest release](https://github.com/lucianodiisouza/semaphore/releases/latest)**
 
 Each release includes the Semaphore desktop app (`.dmg`, `.msi`, `.deb`, or `.AppImage`) and the `semctl` CLI for hook installation.
 

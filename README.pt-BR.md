@@ -10,7 +10,7 @@ Vermelho = escrevendo / editando arquivos
 
 Binários prontos para macOS (Apple Silicon e Intel), Linux e Windows:
 
-**[Baixar último release](https://github.com/lucianodiisouza/semaphone/releases/latest)**
+**[Baixar último release](https://github.com/lucianodiisouza/semaphore/releases/latest)**
 
 Cada release inclui o app Semaphore (`.dmg`, `.msi`, `.deb` ou `.AppImage`) e o CLI `semctl` para instalar os hooks.
 
