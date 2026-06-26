@@ -13,6 +13,7 @@
     "@rollup/plugin-commonjs": "^28",
     "@rollup/plugin-node-resolve": "^15",
     "@rollup/plugin-typescript": "^12",
+    "@types/node": "^22",
     "rollup": "^4",
     "tslib": "^2",
     "typescript": "^5"
