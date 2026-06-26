@@ -44,6 +44,7 @@ Right-click the Semaphore icon in the system tray:
 | **Hide Window** | Hide the floating widget |
 | **Settings** | Open the settings window |
 | **Toggle Stealth** | Hide the widget from screen capture |
+| **Always on Top** | Keep the widget above other windows (not in macOS fullscreen) |
 | **Quit** | Exit Semaphore |
 
 Left-click the tray icon to show/focus the widget.
