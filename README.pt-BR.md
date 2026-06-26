@@ -20,6 +20,8 @@ Binários prontos para macOS (Apple Silicon e Intel), Linux e Windows:
 
 Cada release inclui o app Semaphore (`.dmg`, `.msi`, `.deb` ou `.AppImage`) e o CLI `semctl`, copiado para `~/.semaphore/bin/` na primeira execução.
 
+> **macOS:** Se o sistema disser que o app está *danificado* ou não abrir após o download, veja [Gatekeeper no macOS](#gatekeeper-no-macos-app-danificado-ou-não-abre) abaixo. O app não está corrompido — o macOS bloqueia downloads não assinados por padrão.
+
 ---
 
 ## Início rápido
@@ -128,6 +130,40 @@ Eventos da ferramenta de IA → hooks → sem-hook → semctl → IPC → app Se
 O estado é agregado por sessão: **vermelho > amarelo > verde**. Sessões inativas expiram após `idle_timeout_secs`.
 
 Documentação completa em inglês: [README.md](README.md) (arquitetura, protocolo IPC, solução de problemas, contribuição).
+
+---
+
+## Solução de problemas
+
+### Gatekeeper no macOS: app danificado ou não abre
+
+Depois de baixar o `.dmg` pelo GitHub, o macOS pode mostrar **"Semaphore" está danificado e não pode ser aberto**. Isso é um aviso de quarentena do Gatekeeper, não um arquivo corrompido. Os releases ainda não são notarizados pela Apple.
+
+Escolha um dos caminhos:
+
+**Opção A — Remover a quarentena (recomendado)**
+
+```bash
+xattr -cr /Applications/Semaphore.app
+```
+
+Ajuste o caminho se você instalou o Semaphore em outro lugar.
+
+**Opção B — Abrir pelo menu de contexto**
+
+1. Não abra com duplo clique.
+2. Clique com o botão direito em **Semaphore** → **Abrir**.
+3. Confirme **Abrir** no diálogo.
+
+**Opção C — Ajustes do Sistema**
+
+1. Tente abrir o app uma vez (vai falhar).
+2. Abra **Ajustes do Sistema → Privacidade e Segurança**.
+3. Clique em **Abrir mesmo assim** na mensagem sobre o Semaphore.
+
+Depois da primeira abertura bem-sucedida, normalmente não é preciso repetir esses passos.
+
+Outros problemas (luz travada, hooks, `semctl doctor`): veja [Troubleshooting no README.md](README.md#troubleshooting).
 
 ---
 

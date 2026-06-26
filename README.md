@@ -47,6 +47,8 @@ Each release includes:
 
 You don't need a terminal for normal use after install.
 
+> **macOS:** If the system says the app is *damaged* or won't open after download, see [macOS Gatekeeper](#macos-gatekeeper-app-is-damaged-or-wont-open) below. The app is not corrupted — macOS blocks unsigned downloads by default.
+
 ---
 
 ## Quick start
@@ -438,6 +440,34 @@ Enable in **Settings** or the tray menu (**Toggle Stealth**). You only confirm t
 ---
 
 ## Troubleshooting
+
+### macOS Gatekeeper: app is damaged or won't open
+
+After downloading the `.dmg` from GitHub, macOS may show **"Semaphore" is damaged and can't be opened**. This is a Gatekeeper quarantine warning, not a corrupt file. Releases are not yet Apple-notarized.
+
+Pick one workaround:
+
+**Option A — Remove quarantine (recommended)**
+
+```bash
+xattr -cr /Applications/Semaphore.app
+```
+
+Adjust the path if you installed Semaphore somewhere else.
+
+**Option B — Open from the context menu**
+
+1. Do not double-click the app.
+2. Right-click **Semaphore** → **Open**.
+3. Confirm **Open** in the dialog.
+
+**Option C — System Settings**
+
+1. Try opening the app once (it will fail).
+2. Open **System Settings → Privacy & Security**.
+3. Click **Open Anyway** next to the Semaphore block message.
+
+After the first successful launch, you should not need these steps again.
 
 ### Light stays green while the agent is working
 
