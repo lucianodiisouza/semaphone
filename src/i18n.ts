@@ -10,6 +10,20 @@ export interface LocaleStrings {
     cancel: string;
     save: string;
     stealthNote: string;
+    sounds: string;
+    soundsEnabled: string;
+    soundsNote: string;
+    soundGreen: string;
+    soundYellow: string;
+    soundRed: string;
+    soundPreset: string;
+    soundCustom: string;
+    soundBrowse: string;
+    soundPreview: string;
+    soundCustomActive: string;
+    soundImportFailed: string;
+    soundTooLarge: string;
+    soundTooLong: string;
   };
   tools: {
     cursor: string;
@@ -48,6 +62,20 @@ export const locales: Record<Locale, LocaleStrings> = {
       save: "Save",
       stealthNote:
         "Stealth works best on Windows. On macOS 15+ some capture tools may still record the window.",
+      sounds: "Notification sounds",
+      soundsEnabled: "Play a sound when the light changes",
+      soundsNote: "Custom files must be under 512 KB and 3 seconds. Built-in sounds are short tones.",
+      soundGreen: "Green (ready)",
+      soundYellow: "Yellow (thinking)",
+      soundRed: "Red (writing)",
+      soundPreset: "Sound",
+      soundCustom: "Custom file…",
+      soundBrowse: "Browse…",
+      soundPreview: "Preview",
+      soundCustomActive: "Using custom file",
+      soundImportFailed: "Could not import audio file. Check format and size.",
+      soundTooLarge: "File is too large (max 512 KB).",
+      soundTooLong: "Audio is too long (max 3 seconds).",
     },
     tools: {
       cursor: "Cursor",
@@ -100,6 +128,20 @@ export const locales: Record<Locale, LocaleStrings> = {
       save: "Salvar",
       stealthNote:
         "Stealth funciona melhor no Windows. No macOS 15+ algumas ferramentas ainda podem capturar a janela.",
+      sounds: "Sons de notificação",
+      soundsEnabled: "Tocar um som quando a luz mudar",
+      soundsNote: "Arquivos personalizados devem ter até 512 KB e 3 segundos. Sons integrados são tons curtos.",
+      soundGreen: "Verde (pronto)",
+      soundYellow: "Amarelo (pensando)",
+      soundRed: "Vermelho (escrevendo)",
+      soundPreset: "Som",
+      soundCustom: "Arquivo personalizado…",
+      soundBrowse: "Procurar…",
+      soundPreview: "Ouvir",
+      soundCustomActive: "Usando arquivo personalizado",
+      soundImportFailed: "Não foi possível importar o áudio. Verifique formato e tamanho.",
+      soundTooLarge: "Arquivo muito grande (máx. 512 KB).",
+      soundTooLong: "Áudio muito longo (máx. 3 segundos).",
     },
     tools: {
       cursor: "Cursor",
