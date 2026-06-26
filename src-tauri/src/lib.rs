@@ -83,6 +83,20 @@ fn show_onboarding(app: AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
+fn restart_onboarding(app: AppHandle) -> Result<(), String> {
+    if let Some(window) = app.get_webview_window("settings") {
+        window.hide().map_err(|e| e.to_string())?;
+    }
+    if let Some(window) = app.get_webview_window("onboarding") {
+        window.show().map_err(|e| e.to_string())?;
+        window.center().map_err(|e| e.to_string())?;
+        window.set_focus().map_err(|e| e.to_string())?;
+        let _ = app.emit("onboarding-restart", ());
+    }
+    Ok(())
+}
+
+#[tauri::command]
 async fn apply_window_size(app: AppHandle, size: String, horizontal: bool) -> Result<(), String> {
     apply_main_window_size(&app, &size, horizontal)
 }
@@ -352,6 +366,7 @@ pub fn run() {
             complete_onboarding,
             show_settings,
             show_onboarding,
+            restart_onboarding,
             apply_window_size,
             import_stage_sound
         ])

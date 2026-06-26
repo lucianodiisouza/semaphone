@@ -120,6 +120,9 @@ function applyLocale(locale: Locale): void {
   document.getElementById("connect-gemini")!.textContent = strings.tools.gemini;
   document.getElementById("connect-copilot")!.textContent = strings.tools.copilot;
   document.getElementById("connect-all")!.textContent = strings.tools.all;
+  document.getElementById("label-onboarding")!.textContent = strings.settings.onboarding;
+  document.getElementById("onboarding-note")!.textContent = strings.settings.onboardingNote;
+  document.getElementById("btn-restart-onboarding")!.textContent = strings.settings.redoOnboarding;
   document.getElementById("about-title")!.textContent = strings.about.title;
   document.getElementById("about-description")!.textContent = strings.about.description;
   document.getElementById("about-controls-title")!.textContent = strings.about.controlsTitle;
@@ -350,4 +353,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("connect-gemini")?.addEventListener("click", () => connectTool("gemini-cli"));
   document.getElementById("connect-copilot")?.addEventListener("click", () => connectTool("copilot-cli"));
   document.getElementById("connect-all")?.addEventListener("click", () => connectTool("all"));
+
+  document.getElementById("btn-restart-onboarding")?.addEventListener("click", () => {
+    void invoke("restart_onboarding");
+  });
 });

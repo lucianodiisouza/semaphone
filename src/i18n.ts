@@ -28,6 +28,9 @@ export interface LocaleStrings {
     soundImportFailed: string;
     soundTooLarge: string;
     soundTooLong: string;
+    onboarding: string;
+    onboardingNote: string;
+    redoOnboarding: string;
   };
   tools: {
     cursor: string;
@@ -104,6 +107,9 @@ export const locales: Record<Locale, LocaleStrings> = {
       soundImportFailed: "Could not import audio file. Check format and size.",
       soundTooLarge: "File is too large (max 512 KB).",
       soundTooLong: "Audio is too long (max 3 seconds).",
+      onboarding: "Onboarding",
+      onboardingNote: "Walk through the welcome tour and tool setup again.",
+      redoOnboarding: "Redo onboarding",
     },
     tools: {
       cursor: "Cursor",
@@ -197,6 +203,9 @@ export const locales: Record<Locale, LocaleStrings> = {
       soundImportFailed: "Não foi possível importar o áudio. Verifique formato e tamanho.",
       soundTooLarge: "Arquivo muito grande (máx. 512 KB).",
       soundTooLong: "Áudio muito longo (máx. 3 segundos).",
+      onboarding: "Introdução",
+      onboardingNote: "Refaça o tour de boas-vindas e a configuração das ferramentas.",
+      redoOnboarding: "Refazer introdução",
     },
     tools: {
       cursor: "Cursor",

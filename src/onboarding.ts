@@ -1,3 +1,4 @@
+import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { t, type Locale } from "./i18n";
@@ -159,11 +160,19 @@ function prevStep(): void {
   }
 }
 
-window.addEventListener("DOMContentLoaded", async () => {
+async function resetOnboarding(): Promise<void> {
   const config = await invoke<Config>("get_config");
   applyLocale((config.locale as Locale) || "en");
   await loadTools();
   showStep("welcome");
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
+  await resetOnboarding();
+
+  await listen("onboarding-restart", () => {
+    void resetOnboarding();
+  });
 
   document.getElementById("btn-next")?.addEventListener("click", nextStep);
   document.getElementById("btn-back")?.addEventListener("click", prevStep);
