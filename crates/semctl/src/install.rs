@@ -535,3 +535,47 @@ fn home_dir() -> PathBuf {
     }
     PathBuf::from(".")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+
+    #[test]
+    fn merge_cursor_hooks_preserves_existing_entries() {
+        let tmp = tempfile::tempdir().unwrap();
+        let path = tmp.path().join("hooks.json");
+        fs::write(
+            &path,
+            r#"{
+  "version": 1,
+  "hooks": {
+    "customEvent": [{ "command": "echo hello" }]
+  }
+}"#,
+        )
+        .unwrap();
+
+        merge_cursor_hooks(&path).unwrap();
+
+        let content: serde_json::Value = serde_json::from_str(&fs::read_to_string(&path).unwrap()).unwrap();
+        let hooks = content.get("hooks").unwrap().as_object().unwrap();
+        assert!(hooks.contains_key("customEvent"));
+        assert!(hooks.contains_key("stop"));
+        let stop_hooks = hooks.get("stop").unwrap().as_array().unwrap();
+        assert!(stop_hooks
+            .iter()
+            .any(|h| h.get(MARKER) == Some(&serde_json::Value::Bool(true))));
+    }
+
+    #[test]
+    fn merge_cursor_hooks_is_idempotent() {
+        let tmp = tempfile::tempdir().unwrap();
+        let path = tmp.path().join("hooks.json");
+        merge_cursor_hooks(&path).unwrap();
+        let first = fs::read_to_string(&path).unwrap();
+        merge_cursor_hooks(&path).unwrap();
+        let second = fs::read_to_string(&path).unwrap();
+        assert_eq!(first, second);
+    }
+}
