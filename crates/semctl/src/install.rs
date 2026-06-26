@@ -282,7 +282,7 @@ fn merge_cursor_hooks(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
         "thinking",
         Some("Write|Edit"),
     );
-    insert_hook(hooks, "stop", "green", "idle", None);
+    insert_hook(hooks, "stop", "green", "awaiting-input", None);
     insert_hook(hooks, "sessionEnd", "green", "idle", None);
 
     fs::write(path, serde_json::to_string_pretty(&root)?)?;
@@ -305,7 +305,7 @@ fn merge_codex_hooks(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     insert_codex_hook(hooks, "UserPromptSubmit", "yellow", "thinking", "");
     insert_codex_hook(hooks, "PreToolUse", "red", "writing", "Bash");
     insert_codex_hook(hooks, "PostToolUse", "yellow", "thinking", "");
-    insert_codex_hook(hooks, "Stop", "green", "idle", "");
+    insert_codex_hook(hooks, "Stop", "green", "awaiting-input", "");
 
     fs::write(path, serde_json::to_string_pretty(&root)?)?;
     Ok(())
@@ -328,7 +328,7 @@ fn merge_gemini_hooks(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     insert_gemini_hook(hooks, "BeforeModel", "yellow", "thinking", "");
     insert_gemini_hook(hooks, "BeforeTool", "red", "writing", "write_.*");
     insert_gemini_hook(hooks, "AfterTool", "yellow", "thinking", "");
-    insert_gemini_hook(hooks, "AfterAgent", "green", "idle", "");
+    insert_gemini_hook(hooks, "AfterAgent", "green", "awaiting-input", "");
     insert_gemini_hook(hooks, "SessionEnd", "green", "idle", "");
 
     fs::write(path, serde_json::to_string_pretty(&root)?)?;
@@ -351,7 +351,7 @@ fn merge_copilot_hooks(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     insert_codex_hook(hooks, "UserPromptSubmit", "yellow", "thinking", "");
     insert_codex_hook(hooks, "PreToolUse", "red", "writing", "Write|Edit|Bash");
     insert_codex_hook(hooks, "PostToolUse", "yellow", "thinking", "");
-    insert_codex_hook(hooks, "Stop", "green", "idle", "");
+    insert_codex_hook(hooks, "Stop", "green", "awaiting-input", "");
 
     fs::write(path, serde_json::to_string_pretty(&root)?)?;
     Ok(())
@@ -426,7 +426,7 @@ fn merge_claude_hooks(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     insert_claude_hook(hooks, "UserPromptSubmit", "yellow", "thinking", "");
     insert_claude_hook(hooks, "PreToolUse", "red", "writing", "Write|Edit|Bash");
     insert_claude_hook(hooks, "PostToolUse", "yellow", "thinking", "");
-    insert_claude_hook(hooks, "Stop", "green", "idle", "");
+    insert_claude_hook(hooks, "Stop", "green", "awaiting-input", "");
     insert_claude_hook(hooks, "SessionEnd", "green", "idle", "");
 
     fs::write(path, serde_json::to_string_pretty(&root)?)?;
