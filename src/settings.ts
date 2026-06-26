@@ -23,7 +23,7 @@ const STAGES: Light[] = ["green", "yellow", "red"];
 let currentLocale: Locale = "en";
 let selectedTheme = "classic";
 let selectedSize = "medium";
-let appVersion = "0.1.0";
+let appVersion = "0.2.0";
 const customPaths: Record<Light, string | null> = {
   green: null,
   yellow: null,
@@ -441,7 +441,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   try {
     appVersion = await getVersion();
   } catch {
-    appVersion = "0.1.0";
+    appVersion = "0.2.0";
   }
 
   await window.onCloseRequested(async (event) => {

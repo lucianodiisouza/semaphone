@@ -376,8 +376,8 @@ npm test                      # Frontend tests (Vitest)
 Tag a version to trigger the GitHub Actions release workflow:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
 Builds run for macOS (arm64 + x64), Linux (x64), and Windows (x64). Artifacts are published to [GitHub Releases](https://github.com/lucianodiisouza/semaphore/releases).
