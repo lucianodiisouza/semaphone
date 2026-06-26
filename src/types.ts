@@ -12,14 +12,24 @@ export interface SoundsConfig {
   red: StageSound;
 }
 
+export type WindowSize = "small" | "medium" | "large";
+
 export interface Config {
   idle_timeout_secs: number;
   stealth: boolean;
   stealth_acknowledged: boolean;
   theme: string;
   locale: string;
-  window: { x: number; y: number };
+  onboarding_completed: boolean;
+  window: { x: number; y: number; size: string };
   sounds: SoundsConfig;
+}
+
+export interface ToolStatus {
+  id: string;
+  name: string;
+  installed: boolean;
+  connected: boolean;
 }
 
 export const SOUND_PRESETS = [

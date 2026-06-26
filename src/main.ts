@@ -4,10 +4,20 @@ import { invoke } from "@tauri-apps/api/core";
 import { applyTheme } from "./themes";
 import { t, type Locale } from "./i18n";
 import { playStageSound } from "./sounds";
+import {
+  pointerDistance,
+  shouldOpenSettingsOnDoubleClick,
+} from "./interaction";
+import { applyWindowSize } from "./window-size";
 import type { Config, Light } from "./types";
 
 let currentLight: Light = "green";
 let currentConfig: Config | null = null;
+
+let dragStartX = 0;
+let dragStartY = 0;
+let dragMovedPx = 0;
+let isDragging = false;
 
 function setActiveLight(state: Light): void {
   document.querySelectorAll<HTMLElement>("[data-light]").forEach((el) => {
@@ -22,17 +32,19 @@ function applyMainLocale(locale: Locale): void {
   if (housing) {
     housing.title = strings.main.dragHint;
   }
-  const settingsBtn = document.getElementById("settings-btn");
-  if (settingsBtn) {
-    settingsBtn.title = strings.main.settingsHint;
-  }
+}
+
+async function applyConfigToUi(config: Config): Promise<void> {
+  currentConfig = config;
+  applyTheme(config.theme);
+  applyMainLocale((config.locale as Locale) || "en");
+  applyWindowSize(config.window.size);
+  await invoke("apply_window_size", { size: config.window.size });
 }
 
 async function loadConfig(): Promise<Config> {
   const config = await invoke<Config>("get_config");
-  currentConfig = config;
-  applyTheme(config.theme);
-  applyMainLocale((config.locale as Locale) || "en");
+  await applyConfigToUi(config);
   return config;
 }
 
@@ -55,39 +67,60 @@ function handleStateChange(state: Light): void {
   }
 }
 
-function setupDrag(): void {
+function setupDragAndSettings(): void {
   const housing = document.querySelector(".housing") as HTMLElement | null;
-  housing?.addEventListener("mousedown", async (e) => {
+  if (!housing) {
+    return;
+  }
+
+  housing.addEventListener("mousedown", async (e) => {
     if (e.button !== 0) return;
+    isDragging = true;
+    dragMovedPx = 0;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
     e.preventDefault();
     await getCurrentWindow().startDragging();
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    dragMovedPx = Math.max(
+      dragMovedPx,
+      pointerDistance(dragStartX, dragStartY, e.clientX, e.clientY),
+    );
+  });
+
+  window.addEventListener("mouseup", () => {
+    isDragging = false;
+  });
+
+  housing.addEventListener("dblclick", (e) => {
+    e.preventDefault();
+    if (shouldOpenSettingsOnDoubleClick(dragMovedPx)) {
+      void invoke("show_settings");
+    }
   });
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
   await loadConfig();
   setActiveLight("green");
-  setupDrag();
+  setupDragAndSettings();
 
   await listen<{ state: Light }>("state-changed", (event) => {
     handleStateChange(event.payload.state);
   });
 
-  await listen<Config>("config-changed", (event) => {
-    currentConfig = event.payload;
-    applyTheme(event.payload.theme);
-    applyMainLocale(event.payload.locale as Locale);
-  });
-
-  document.getElementById("settings-btn")?.addEventListener("click", () => {
-    invoke("show_settings");
+  await listen<Config>("config-changed", async (event) => {
+    await applyConfigToUi(event.payload);
   });
 
   const window = getCurrentWindow();
   window.onMoved(async () => {
     const pos = await window.outerPosition();
     const config = await invoke<Config>("get_config");
-    config.window = { x: pos.x, y: pos.y };
+    config.window = { ...config.window, x: pos.x, y: pos.y };
     await invoke("save_config", { config });
   });
 });
