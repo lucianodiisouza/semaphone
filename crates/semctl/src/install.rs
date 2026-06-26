@@ -182,6 +182,7 @@ pub fn sync_launch_hooks() -> Result<(), Box<dyn std::error::Error>> {
 
 fn install_cursor() -> Result<(), Box<dyn std::error::Error>> {
     let path = home_dir().join(".cursor/hooks.json");
+    remove_marked_hooks(&path, "hooks")?;
     merge_cursor_hooks(&path)
 }
 
