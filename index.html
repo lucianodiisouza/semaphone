@@ -9,9 +9,18 @@
   <body data-size="medium" data-orientation="vertical">
     <div id="app">
       <div class="housing" title="Click and drag here to move">
-        <div class="light red" data-light="red"></div>
-        <div class="light yellow" data-light="yellow"></div>
-        <div class="light green active" data-light="green"></div>
+        <div class="light-stack">
+          <span class="light-halo" aria-hidden="true"></span>
+          <div class="light red" data-light="red"></div>
+        </div>
+        <div class="light-stack">
+          <span class="light-halo" aria-hidden="true"></span>
+          <div class="light yellow" data-light="yellow"></div>
+        </div>
+        <div class="light-stack">
+          <span class="light-halo" aria-hidden="true"></span>
+          <div class="light green active" data-light="green"></div>
+        </div>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
