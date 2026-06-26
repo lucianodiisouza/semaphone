@@ -4,7 +4,6 @@
   "name": "Minimal",
   "housingBg": "#f4f4f5",
   "housingBorder": "#d4d4d8",
-  "housingShadow": "0 4px 12px rgba(0,0,0,0.12)",
   "lensOff": "#e4e4e7",
   "green": "#16a34a",
   "greenGlow": "0 0 10px rgba(22,163,74,0.5)",

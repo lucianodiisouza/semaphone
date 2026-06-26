@@ -1,7 +1,6 @@
 :root {
   --housing-bg: #1a1a1a;
   --housing-border: #2e2e2e;
-  --housing-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   --lens-off: #2a2a2a;
   --green: #3ddc67;
   --green-glow: 0 0 18px rgba(61, 220, 103, 0.85);
@@ -18,8 +17,8 @@
   --light-border: 2px;
   --light-halo-scale: 1.35;
   --window-inset-top: 0px;
-  --window-inset-right: 28px;
-  --window-inset-bottom: 28px;
+  --window-inset-right: 0px;
+  --window-inset-bottom: 0px;
   --window-inset-left: 0px;
 }
 
@@ -75,7 +74,6 @@ body {
   border-radius: var(--housing-radius);
   background: var(--housing-bg);
   border: 1px solid var(--housing-border);
-  box-shadow: var(--housing-shadow);
   display: flex;
   flex-direction: column;
   gap: var(--housing-gap);

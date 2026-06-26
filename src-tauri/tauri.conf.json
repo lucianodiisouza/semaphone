@@ -16,8 +16,8 @@
       {
         "label": "main",
         "title": "Semaphore",
-        "width": 84,
-        "height": 188,
+        "width": 56,
+        "height": 162,
         "resizable": false,
         "decorations": false,
         "transparent": true,

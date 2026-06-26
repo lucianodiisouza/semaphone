@@ -5,7 +5,6 @@ import neon from "./themes/neon.json";
 export interface ThemeTokens {
   housingBg: string;
   housingBorder: string;
-  housingShadow: string;
   lensOff: string;
   green: string;
   greenGlow: string;
@@ -34,7 +33,6 @@ export function applyTheme(name: string): void {
   const root = document.documentElement;
   root.style.setProperty("--housing-bg", theme.housingBg);
   root.style.setProperty("--housing-border", theme.housingBorder);
-  root.style.setProperty("--housing-shadow", theme.housingShadow);
   root.style.setProperty("--lens-off", theme.lensOff);
   root.style.setProperty("--green", theme.green);
   root.style.setProperty("--green-glow", theme.greenGlow);

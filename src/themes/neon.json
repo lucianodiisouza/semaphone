@@ -4,7 +4,6 @@
   "name": "Neon",
   "housingBg": "#0a0a12",
   "housingBorder": "#1e1e3a",
-  "housingShadow": "0 0 28px rgba(120,0,255,0.35)",
   "lensOff": "#141428",
   "green": "#00ff9f",
   "greenGlow": "0 0 22px rgba(0,255,159,0.9)",
