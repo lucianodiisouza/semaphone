@@ -14,6 +14,9 @@ export interface LocaleStrings {
   tools: {
     cursor: string;
     claude: string;
+    codex: string;
+    gemini: string;
+    copilot: string;
     all: string;
     connected: string;
     failed: string;
@@ -36,6 +39,9 @@ export const locales: Record<Locale, LocaleStrings> = {
     tools: {
       cursor: "Cursor",
       claude: "Claude Code",
+      codex: "Codex CLI",
+      gemini: "Gemini CLI",
+      copilot: "Copilot CLI",
       all: "Connect all",
       connected: "Hooks installed",
       failed: "Install failed",
@@ -56,6 +62,9 @@ export const locales: Record<Locale, LocaleStrings> = {
     tools: {
       cursor: "Cursor",
       claude: "Claude Code",
+      codex: "Codex CLI",
+      gemini: "Gemini CLI",
+      copilot: "Copilot CLI",
       all: "Conectar todas",
       connected: "Hooks instalados",
       failed: "Falha na instalação",

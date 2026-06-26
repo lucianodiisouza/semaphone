@@ -1,0 +1,15 @@
+{
+  "themeVersion": 1,
+  "id": "minimal",
+  "name": "Minimal",
+  "housingBg": "#f4f4f5",
+  "housingBorder": "#d4d4d8",
+  "housingShadow": "0 4px 12px rgba(0,0,0,0.12)",
+  "lensOff": "#e4e4e7",
+  "green": "#16a34a",
+  "greenGlow": "0 0 10px rgba(22,163,74,0.5)",
+  "yellow": "#ca8a04",
+  "yellowGlow": "0 0 10px rgba(202,138,4,0.5)",
+  "red": "#dc2626",
+  "redGlow": "0 0 10px rgba(220,38,38,0.5)"
+}

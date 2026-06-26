@@ -12,6 +12,9 @@
   "tools": {
     "cursor": "Cursor",
     "claude": "Claude Code",
+    "codex": "Codex CLI",
+    "gemini": "Gemini CLI",
+    "copilot": "Copilot CLI",
     "all": "Conectar todas",
     "connected": "Hooks instalados",
     "failed": "Falha na instalação"

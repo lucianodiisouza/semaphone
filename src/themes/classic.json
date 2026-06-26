@@ -1,0 +1,15 @@
+{
+  "themeVersion": 1,
+  "id": "classic",
+  "name": "Classic",
+  "housingBg": "#1a1a1a",
+  "housingBorder": "#2e2e2e",
+  "housingShadow": "0 8px 24px rgba(0,0,0,0.45)",
+  "lensOff": "#2a2a2a",
+  "green": "#3ddc67",
+  "greenGlow": "0 0 18px rgba(61,220,103,0.85)",
+  "yellow": "#ffd34d",
+  "yellowGlow": "0 0 18px rgba(255,211,77,0.85)",
+  "red": "#ff4d4d",
+  "redGlow": "0 0 18px rgba(255,77,77,0.85)"
+}

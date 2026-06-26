@@ -9,6 +9,7 @@ type Light = "green" | "yellow" | "red";
 interface Config {
   idle_timeout_secs: number;
   stealth: boolean;
+  stealth_acknowledged: boolean;
   theme: string;
   locale: string;
   window: { x: number; y: number };
@@ -36,6 +37,9 @@ function applyLocale(locale: Locale): void {
   document.getElementById("stealth-note")!.textContent = strings.settings.stealthNote;
   document.getElementById("connect-cursor")!.textContent = strings.tools.cursor;
   document.getElementById("connect-claude")!.textContent = strings.tools.claude;
+  document.getElementById("connect-codex")!.textContent = strings.tools.codex;
+  document.getElementById("connect-gemini")!.textContent = strings.tools.gemini;
+  document.getElementById("connect-copilot")!.textContent = strings.tools.copilot;
   document.getElementById("connect-all")!.textContent = strings.tools.all;
 }
 
@@ -49,11 +53,28 @@ async function loadConfig(): Promise<Config> {
   return config;
 }
 
+async function maybeAcknowledgeStealth(config: Config): Promise<Config> {
+  const checkbox = document.getElementById("stealth-checkbox") as HTMLInputElement;
+  if (!checkbox.checked || config.stealth_acknowledged) {
+    return config;
+  }
+  const strings = t(currentLocale);
+  const ok = confirm(strings.settings.stealthNote);
+  if (!ok) {
+    checkbox.checked = false;
+    config.stealth = false;
+    return config;
+  }
+  config.stealth_acknowledged = true;
+  return config;
+}
+
 async function saveConfigFromForm(): Promise<void> {
-  const config = await invoke<Config>("get_config");
+  let config = await invoke<Config>("get_config");
   config.theme = (document.getElementById("theme-select") as HTMLSelectElement).value;
   config.locale = (document.getElementById("locale-select") as HTMLSelectElement).value;
   config.stealth = (document.getElementById("stealth-checkbox") as HTMLInputElement).checked;
+  config = await maybeAcknowledgeStealth(config);
   await invoke("save_config", { config });
   applyTheme(config.theme);
   applyLocale(config.locale as Locale);
@@ -91,6 +112,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("connect-cursor")?.addEventListener("click", () => connectTool("cursor"));
   document.getElementById("connect-claude")?.addEventListener("click", () => connectTool("claude-code"));
+  document.getElementById("connect-codex")?.addEventListener("click", () => connectTool("codex"));
+  document.getElementById("connect-gemini")?.addEventListener("click", () => connectTool("gemini-cli"));
+  document.getElementById("connect-copilot")?.addEventListener("click", () => connectTool("copilot-cli"));
   document.getElementById("connect-all")?.addEventListener("click", () => connectTool("all"));
 
   const window = getCurrentWindow();

@@ -13,6 +13,8 @@ pub struct Config {
     #[serde(default = "default_locale")]
     pub locale: String,
     #[serde(default)]
+    pub stealth_acknowledged: bool,
+    #[serde(default)]
     pub window: WindowConfig,
 }
 
@@ -51,11 +53,22 @@ impl Default for Config {
         Self {
             idle_timeout_secs: default_idle_timeout(),
             stealth: false,
+            stealth_acknowledged: false,
             theme: default_theme(),
-            locale: default_locale(),
+            locale: detect_locale(),
             window: WindowConfig::default(),
         }
     }
+}
+
+fn detect_locale() -> String {
+  if let Ok(locale) = std::env::var("LC_ALL").or_else(|_| std::env::var("LANG")) {
+    let lower = locale.to_lowercase();
+    if lower.starts_with("pt") {
+      return "pt-BR".to_string();
+    }
+  }
+  "en".to_string()
 }
 
 impl Config {
@@ -74,7 +87,9 @@ impl Config {
     pub fn load() -> Self {
         let path = Self::config_path();
         if !path.exists() {
-            return Self::default();
+            let config = Self::default();
+            let _ = config.save();
+            return config;
         }
         std::fs::read_to_string(path)
             .ok()
