@@ -13,7 +13,7 @@ Config: `~/.cursor/hooks.json` (or project `.cursor/hooks.json`)
 | `afterShellExecution` | yellow | Shell command finished |
 | `beforeMCPExecution` | green (blinking) | MCP tool waiting for approval |
 | `afterMCPExecution` | yellow | MCP tool finished |
-| `stop` | green (blinking) | Turn finished — waiting for your reply |
+| `stop` | green (blinking in Agent) / green (idle in Ask) | Turn finished — Agent waits for your reply; Ask goes idle |
 | `sessionEnd` | green | Session closed |
 
 Docs: https://cursor.com/docs/hooks

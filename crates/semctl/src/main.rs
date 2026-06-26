@@ -65,6 +65,10 @@ enum Commands {
     Doctor,
     /// Launch the Semaphore desktop app if not already running
     Launch,
+    /// Cursor beforeSubmitPrompt: cache composer mode and set yellow
+    CursorPrompt,
+    /// Cursor stop: idle for Ask, awaiting-input for Agent
+    CursorStop,
 }
 
 #[tokio::main]
@@ -129,6 +133,21 @@ async fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Commands::Launch => {
             semctl::launch::launch_app()?;
         }
+        Commands::CursorPrompt => {
+            let input = read_stdin()?;
+            semctl::cursor_hooks::handle_cursor_prompt(&input).await?;
+        }
+        Commands::CursorStop => {
+            let input = read_stdin()?;
+            semctl::cursor_hooks::handle_cursor_stop(&input).await?;
+        }
     }
     Ok(())
+}
+
+fn read_stdin() -> Result<String, Box<dyn std::error::Error>> {
+    use std::io::Read;
+    let mut input = String::new();
+    std::io::stdin().read_to_string(&mut input)?;
+    Ok(input)
 }

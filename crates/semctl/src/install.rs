@@ -149,6 +149,15 @@ fn hook_command(state: &str, reason: &str) -> String {
     format!("{} {} {}", hook.display(), state, reason)
 }
 
+fn semctl_subcommand_command(subcommand: &str) -> String {
+    let semctl = Config::bin_dir().join(if cfg!(windows) {
+        "semctl.exe"
+    } else {
+        "semctl"
+    });
+    format!("{} {}", semctl.display(), subcommand)
+}
+
 fn launch_hook_command() -> String {
     let semctl = Config::bin_dir().join(if cfg!(windows) {
         "semctl.exe"
@@ -266,7 +275,7 @@ fn merge_cursor_hooks(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
         .and_then(|v| v.as_object_mut())
         .ok_or("invalid cursor hooks.json structure")?;
 
-    insert_hook(hooks, "beforeSubmitPrompt", "yellow", "thinking", None);
+    insert_cursor_semctl_hook(hooks, "beforeSubmitPrompt", "cursor-prompt");
     insert_hook(hooks, "afterAgentThought", "yellow", "thinking", None);
     insert_hook(
         hooks,
@@ -287,7 +296,7 @@ fn merge_cursor_hooks(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     insert_hook(hooks, "afterShellExecution", "yellow", "thinking", None);
     insert_hook(hooks, "beforeMCPExecution", "green", "awaiting-input", None);
     insert_hook(hooks, "afterMCPExecution", "yellow", "thinking", None);
-    insert_hook(hooks, "stop", "green", "awaiting-input", None);
+    insert_cursor_semctl_hook(hooks, "stop", "cursor-stop");
     insert_hook(hooks, "sessionEnd", "green", "idle", None);
 
     fs::write(path, serde_json::to_string_pretty(&root)?)?;
@@ -445,8 +454,25 @@ fn insert_hook(
     reason: &str,
     matcher: Option<&str>,
 ) {
+    insert_command_hook(hooks, event, &hook_command(state, reason), matcher);
+}
+
+fn insert_cursor_semctl_hook(
+    hooks: &mut serde_json::Map<String, serde_json::Value>,
+    event: &str,
+    subcommand: &str,
+) {
+    insert_command_hook(hooks, event, &semctl_subcommand_command(subcommand), None);
+}
+
+fn insert_command_hook(
+    hooks: &mut serde_json::Map<String, serde_json::Value>,
+    event: &str,
+    command: &str,
+    matcher: Option<&str>,
+) {
     let mut entry = serde_json::json!({
-        "command": hook_command(state, reason),
+        "command": command,
         "_semaphore": true
     });
     if let Some(m) = matcher {
@@ -794,6 +820,17 @@ mod tests {
         assert!(stop_hooks
             .iter()
             .any(|h| h.get(MARKER) == Some(&serde_json::Value::Bool(true))));
+        assert!(stop_hooks.iter().any(|h| {
+            h.get("command")
+                .and_then(|c| c.as_str())
+                .is_some_and(|c| c.contains("cursor-stop"))
+        }));
+        let prompt_hooks = hooks.get("beforeSubmitPrompt").unwrap().as_array().unwrap();
+        assert!(prompt_hooks.iter().any(|h| {
+            h.get("command")
+                .and_then(|c| c.as_str())
+                .is_some_and(|c| c.contains("cursor-prompt"))
+        }));
     }
 
     #[test]

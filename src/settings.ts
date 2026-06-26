@@ -23,7 +23,7 @@ const SOUND_STAGES: SoundStage[] = ["green", "yellow", "red", "awaiting_input"];
 let currentLocale: Locale = "en";
 let selectedTheme = "classic";
 let selectedSize = "medium";
-let appVersion = "0.2.3";
+let appVersion = "0.2.4";
 const customPaths: Record<SoundStage, string | null> = {
   green: null,
   yellow: null,
@@ -449,7 +449,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   try {
     appVersion = await getVersion();
   } catch {
-    appVersion = "0.2.3";
+    appVersion = "0.2.4";
   }
 
   await window.onCloseRequested(async (event) => {
