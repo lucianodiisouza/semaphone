@@ -126,6 +126,28 @@ export function playTestLightsMelody(): void {
   playTone(ctx, 523.25, t0 + step * 2.85, 0.35, 0.1);
 }
 
+const GENIUS_TONE: Record<Light, number> = {
+  green: 523.25,
+  yellow: 659.25,
+  red: 783.99,
+};
+
+export function playGeniusTone(light: Light): void {
+  const ctx = getAudioContext();
+  resumeContext(ctx);
+  playTone(ctx, GENIUS_TONE[light], ctx.currentTime, 0.28, 0.14);
+}
+
+export function playGeniusGameOverMelody(): void {
+  const ctx = getAudioContext();
+  resumeContext(ctx);
+  const t0 = ctx.currentTime;
+
+  playTone(ctx, 392, t0, 0.2, 0.12);
+  playTone(ctx, 349.23, t0 + 0.22, 0.2, 0.11);
+  playTone(ctx, 293.66, t0 + 0.44, 0.35, 0.1);
+}
+
 export async function playStageSound(_stage: Light, sound: StageSound): Promise<void> {
   if (sound.custom_path) {
     try {
