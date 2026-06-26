@@ -68,13 +68,21 @@ fn default_window_size() -> String {
     "medium".to_string()
 }
 
+/// Padding around the housing so box-shadow and light glow are not clipped.
+const WINDOW_INSET: u32 = 28;
+
+fn housing_dimensions(size: &str) -> (u32, u32) {
+    match size {
+        "small" => (42, 122),
+        "large" => (84, 236),
+        _ => (56, 160),
+    }
+}
+
 /// Physical pixel dimensions for the main widget window.
 pub fn window_dimensions(size: &str) -> (u32, u32) {
-    match size {
-        "small" => (54, 150),
-        "large" => (108, 300),
-        _ => (72, 200),
-    }
+    let (width, height) = housing_dimensions(size);
+    (width + 2 * WINDOW_INSET, height + 2 * WINDOW_INSET)
 }
 
 fn default_idle_timeout() -> u64 {
@@ -225,10 +233,10 @@ mod tests {
 
     #[test]
     fn window_dimensions_for_each_size() {
-        assert_eq!(window_dimensions("small"), (54, 150));
-        assert_eq!(window_dimensions("medium"), (72, 200));
-        assert_eq!(window_dimensions("large"), (108, 300));
-        assert_eq!(window_dimensions("unknown"), (72, 200));
+        assert_eq!(window_dimensions("small"), (98, 178));
+        assert_eq!(window_dimensions("medium"), (112, 216));
+        assert_eq!(window_dimensions("large"), (140, 292));
+        assert_eq!(window_dimensions("unknown"), (112, 216));
     }
 
     #[test]

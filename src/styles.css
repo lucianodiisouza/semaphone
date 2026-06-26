@@ -16,6 +16,7 @@
   --housing-radius: 14px;
   --light-size: 40px;
   --light-border: 2px;
+  --window-inset: 28px;
 }
 
 body[data-size="small"] {
@@ -57,6 +58,7 @@ body {
 #app {
   width: fit-content;
   height: fit-content;
+  padding: var(--window-inset);
   background: transparent;
 }
 
