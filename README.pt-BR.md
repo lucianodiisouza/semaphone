@@ -6,6 +6,14 @@ Verde = pronto para nova tarefa
 Amarelo = pensando  
 Vermelho = escrevendo / editando arquivos
 
+## Download
+
+Binários prontos para macOS (Apple Silicon e Intel), Linux e Windows:
+
+**[Baixar último release](https://github.com/lucianodiisouza/semaphone/releases/latest)**
+
+Cada release inclui o app Semaphore (`.dmg`, `.msi`, `.deb` ou `.AppImage`) e o CLI `semctl` para instalar os hooks.
+
 ## Um app só
 
 Instale o Semaphore, abra uma vez e conecte suas ferramentas nas Configurações — sem terminal.

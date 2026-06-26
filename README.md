@@ -8,9 +8,17 @@ Floating traffic light for AI coding agents. Know at a glance when your agent is
 | **Yellow** | Thinking / running tools |
 | **Red** | Writing or editing files |
 
+## Download
+
+Pre-built binaries for macOS (Apple Silicon & Intel), Linux, and Windows:
+
+**[Download latest release](https://github.com/lucianodiisouza/semaphone/releases/latest)**
+
+Each release includes the Semaphore desktop app (`.dmg`, `.msi`, `.deb`, or `.AppImage`) and the `semctl` CLI for hook installation.
+
 ## Quick start
 
-1. Download a release for your OS (or build from source)
+1. Download a release for your OS (or [build from source](#development))
 2. Launch Semaphore — it stays in the system tray
 3. Open **Settings** and connect your AI tools
 4. Use your tools normally; hooks update the light automatically

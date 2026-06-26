@@ -41,11 +41,9 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - run: npm ci
-      - run: cargo build --release -p semctl --target ${{ matrix.target }}
       - run: npm run tauri build -- --target ${{ matrix.target }}
         env:
-          TAURI_SIGNING_PRIVATE_KEY: ""
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
+          CARGO_BUILD_TARGET: ${{ matrix.target }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -63,8 +61,31 @@ jobs:
         with:
           path: artifacts
 
+      - name: Prepare release assets
+        run: |
+          mkdir -p release-assets
+          find artifacts -type f | while read -r file; do
+            base=$(basename "$file")
+            case "$file" in
+              *aarch64-apple-darwin*) suffix="-macos-arm64" ;;
+              *x86_64-apple-darwin*) suffix="-macos-x64" ;;
+              *x86_64-unknown-linux-gnu*) suffix="-linux-x64" ;;
+              *x86_64-pc-windows-msvc*) suffix="-windows-x64" ;;
+              *) suffix="" ;;
+            esac
+            if [[ "$base" == *.* ]]; then
+              ext="${base##*.}"
+              stem="${base%.*}"
+              dest="${stem}${suffix}.${ext}"
+            else
+              dest="${base}${suffix}"
+            fi
+            cp "$file" "release-assets/$dest"
+          done
+          ls -la release-assets/
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/**/*
+          files: release-assets/*
           generate_release_notes: true

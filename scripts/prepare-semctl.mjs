@@ -12,17 +12,19 @@ if (!host) {
   process.exit(1);
 }
 
+const target = process.env.CARGO_BUILD_TARGET || host;
 const profile = process.env.PROFILE === "release" ? "release" : "debug";
 const releaseFlag = profile === "release" ? " --release" : "";
+const targetFlag = target !== host ? ` --target ${target}` : "";
 
-execSync(`cargo build -p semctl --bin semctl${releaseFlag}`, {
+execSync(`cargo build -p semctl --bin semctl${releaseFlag}${targetFlag}`, {
   cwd: root,
   stdio: "inherit",
 });
 
 const semctlName = process.platform === "win32" ? "semctl.exe" : "semctl";
 const candidates = [
-  join(root, "target", host, profile, semctlName),
+  join(root, "target", target, profile, semctlName),
   join(root, "target", profile, semctlName),
 ];
 
@@ -37,7 +39,7 @@ mkdirSync(binDir, { recursive: true });
 
 const staged = join(
   binDir,
-  process.platform === "win32" ? `semctl-${host}.exe` : `semctl-${host}`,
+  process.platform === "win32" ? `semctl-${target}.exe` : `semctl-${target}`,
 );
 cpSync(built, staged);
 console.log(`prepare-semctl: staged ${staged}`);
