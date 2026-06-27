@@ -5,7 +5,7 @@ const POLL_INTERVAL_MS = 500;
 type Listener = (state: LightState) => void;
 
 /** Shared IPC poller so multiple actions reuse one timer. */
-class StatePoller {
+export class StatePoller {
   readonly #listeners = new Set<Listener>();
   #timer: ReturnType<typeof setInterval> | undefined;
   #lastState: LightState = "unknown";

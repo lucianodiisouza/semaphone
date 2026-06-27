@@ -2,7 +2,7 @@ import net from "net";
 import path from "path";
 
 /** Resolves the semaphore IPC socket/pipe path, mirroring sem-core/src/ipc.rs */
-function socketPath(): string {
+export function resolveSocketPath(): string {
   const env = process.env["SEMAPHORE_SOCKET"];
   if (env) return env;
 
@@ -29,7 +29,7 @@ export function queryState(): Promise<LightState> {
       }
     };
 
-    const socket = net.createConnection(socketPath());
+    const socket = net.createConnection(resolveSocketPath());
     let buf = "";
 
     socket.setTimeout(1000);
